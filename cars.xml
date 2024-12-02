@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cars>
+    <car>
+        <name>BMW X5</name>
+        <price>3000000</price>
+        <fuel>Petrol</fuel>
+        <year>2020</year>
+    </car>
+    <car>
+        <name>Audi A6</name>
+        <price>2500000</price>
+        <fuel>Diesel</fuel>
+        <year>2021</year>
+    </car>
+    <car>
+        <name>Mercedes-Benz C-Class</name>
+        <price>3200000</price>
+        <fuel>Electric</fuel>
+        <year>2022</year>
+    </car>
+    <car>
+        <name>Tesla Model S</name>
+        <price>4000000</price>
+        <fuel>Electric</fuel>
+        <year>2023</year>
+    </car>
+    <car>
+        <name>Ford Mustang</name>
+        <price>3500000</price>
+        <fuel>Petrol</fuel>
+        <year>2019</year>
+    </car>
+    <car>
+        <name>Honda Civic</name>
+        <price>2000000</price>
+        <fuel>Petrol</fuel>
+        <year>2021</year>
+    </car>
+    <car>
+        <name>Chevrolet Camaro</name>
+        <price>3300000</price>
+        <fuel>Petrol</fuel>
+        <year>2020</year>
+    </car>
+    <car>
+        <name>Volkswagen ID.4</name>
+        <price>2900000</price>
+        <fuel>Electric</fuel>
+        <year>2022</year>
+    </car>
+    <car>
+        <name>Hyundai Tucson</name>
+        <price>1800000</price>
+        <fuel>Diesel</fuel>
+        <year>2021</year>
+    </car>
+    <car>
+        <name>Range Rover Velar</name>
+        <price>4500000</price>
+        <fuel>Petrol</fuel>
+        <year>2023</year>
+    </car>
+</cars>

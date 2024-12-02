@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Автомагазин</title>
+    <style>
+        /* Основные стили */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        main {
+            padding: 20px;
+        }
+
+        /* Оформление фильтров */
+        .filter-section {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .filter-section label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .filter-section input,
+        .filter-section select,
+        .filter-section button {
+            padding: 10px;
+            margin: 5px 10px 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        .filter-section button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .filter-section button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Оформление таблицы */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        th:hover {
+            background-color: #0056b3;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        .btn {
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-buy {
+            background-color: #28a745;
+            color: white;
+        }
+        .btn-buy:hover {
+            background-color: #218838;
+        }
+        .btn-delete {
+            background-color: #dc3545;
+            color: white;
+        }
+        .btn-delete:hover {
+            background-color: #c82333;
+        }
+
+        /* Дополнительное оформление */
+        footer {
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            background-color: #343a40;
+            color: white;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Автомагазин</h1>
+</header>
+
+<main>
+    <div class="filter-section">
+        <label for="fuelFilter">Тип топлива:</label>
+        <select id="fuelFilter">
+            <option value="">Все</option>
+            <option value="Petrol">Бензин</option>
+            <option value="Diesel">Дизель</option>
+            <option value="Electric">Электрический</option>
+        </select>
+
+        <label for="priceFilter">Максимальная цена:</label>
+        <input type="number" id="priceFilter" placeholder="Введите цену">
+
+        <button onclick="applyFilters()">Применить фильтры</button>
+        <button onclick="resetFilters()">Сбросить фильтры</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th onclick="sortData()">Название &#8595;</th>
+                <th>Цена</th>
+                <th>Тип топлива</th>
+                <th>Год выпуска</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody id="carTable"></tbody>
+    </table>
+</main>
+
+<footer>
+     Автомагазин.
+</footer>
+
+<script>
+    let carsData = [];
+    let filteredData = [];
+
+    function loadXMLData() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'cars.xml', true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                const xml = xhr.responseXML;
+                const cars = xml.getElementsByTagName('car');
+                for (let i = 0; i < cars.length; i++) {
+                    const name = cars[i].getElementsByTagName('name')[0].textContent;
+                    const price = parseInt(cars[i].getElementsByTagName('price')[0].textContent);
+                    const fuel = cars[i].getElementsByTagName('fuel')[0].textContent;
+                    const year = parseInt(cars[i].getElementsByTagName('year')[0].textContent);
+                    carsData.push({ name, price, fuel, year });
+                }
+                filteredData = [...carsData];
+                displayData(filteredData);
+            }
+        };
+        xhr.send();
+    }
+
+    function displayData(data) {
+        const carTable = document.getElementById('carTable');
+        carTable.innerHTML = '';
+        data.forEach((car, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${car.name}</td>
+                <td>${car.price.toLocaleString()} ₽</td>
+                <td>${car.fuel}</td>
+                <td>${car.year}</td>
+                <td>
+                    <button class="btn btn-buy" onclick="buyCar('${car.name}')">Купить</button>
+                    <button class="btn btn-delete" onclick="deleteCar(${index})">Удалить</button>
+                </td>
+            `;
+            carTable.appendChild(row);
+        });
+    }
+
+    function applyFilters() {
+        const fuelFilter = document.getElementById('fuelFilter').value;
+        const priceFilter = document.getElementById('priceFilter').value;
+
+        filteredData = carsData.filter(car => {
+            const matchesFuel = fuelFilter ? car.fuel.toLowerCase() === fuelFilter.toLowerCase() : true;
+            const matchesPrice = priceFilter ? car.price <= parseInt(priceFilter) : true;
+            return matchesFuel && matchesPrice;
+        });
+
+        displayData(filteredData);
+    }
+
+    function resetFilters() {
+        document.getElementById('fuelFilter').value = '';
+        document.getElementById('priceFilter').value = '';
+        filteredData = [...carsData];
+        displayData(filteredData);
+    }
+
+    function sortData() {
+        filteredData.sort((a, b) => a.name.localeCompare(b.name));
+        displayData(filteredData);
+    }
+
+    function buyCar(name) {
+        alert(`Вы купили автомобиль: ${name}`);
+    }
+
+    function deleteCar(index) {
+        carsData.splice(index, 1);
+        filteredData = [...carsData];
+        displayData(filteredData);
+    }
+
+    loadXMLData();
+</script>
+
+</body>
+</html>
